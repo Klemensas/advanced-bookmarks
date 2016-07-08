@@ -20,6 +20,7 @@ const barrels: string[] = [
   '@angular/compiler',
   '@angular/http',
   '@angular/router',
+  '@angular/forms',
   '@angular/platform-browser',
   '@angular/platform-browser-dynamic',
 
@@ -29,6 +30,10 @@ const barrels: string[] = [
   // App specific barrels.
   'app',
   'app/shared',
+  'app/card',
+  'app/navbar',
+  'app/create-card',
+  'app/source-select',
   /** @cli-barrel */
 ];
 

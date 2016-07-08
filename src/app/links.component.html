@@ -1,3 +1,11 @@
-<h1>
-  {{title}}
-</h1>
+<div class="container-fluid">
+  <navbar class="clearfix"></navbar>
+  
+  <div class="row">
+    <div class="col-lg-3 col-md-4 col-sm-6" *ngFor="let card of cards">
+        <card [item]="card"></card>
+    </div>
+  </div>
+  
+  <create-card></create-card>
+</div>
