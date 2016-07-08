@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class ConfigurationService {
     public config = {
-        fromStorage: true
+        fromServer: true
     };
   
     constructor() {

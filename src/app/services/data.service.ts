@@ -8,8 +8,8 @@ export class DataService {
     public data = new BehaviorSubject([]); 
 
     constructor(private configService: ConfigurationService) {
-        const fromLocal = configService.config.fromStorage;
-        if (fromLocal) {
+        const fromServer = configService.config.fromServer;
+        if (!fromServer) {
             this.loadLocalData();
         this.inserLocalData({ name: 'kebab', url: 'https://google.com' })
             return;
