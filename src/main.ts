@@ -8,7 +8,7 @@ if (environment.production) {
   enableProdMode();
 } else {
     localStorage.removeItem('storedData');
-    localStorage.removeItem('configuration');
+    // localStorage.removeItem('configuration');
     
 }
 
