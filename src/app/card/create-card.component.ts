@@ -1,27 +1,31 @@
 import { Component, OnInit } from '@angular/core';
-import {NgClass} from '@angular/common';
 
 @Component({
   moduleId: module.id,
   selector: 'create-card',
   templateUrl: 'create-card.component.html',
-  styleUrls: ['create-card.component.css'],
-  directives: [NgClass]
+  styleUrls: ['create-card.component.css']
 })
 export class CreateCardComponent implements OnInit {
-  isActive = false;
   model = {
       name: '',
+      description: '',
       url: ''
   }
-  constructor() {}
+  constructor() { console.log('constr call')}
 
   ngOnInit() {
+
+    console.log('ho?')
   }
 
-  addCard(ev) {
-      this.isActive = true;
-      console.log(ev, this);
+  cardSubmit(ev) {
+      console.log(ev.path);
+      return 'wtf';
+  }
+
+  test() {
+    console.log('i run test')
   }
 
 }

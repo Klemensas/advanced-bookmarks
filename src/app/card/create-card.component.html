@@ -1,31 +1,37 @@
-<div class="card create" (click)="addCard($event)" [ngClass]="{active: isActive}">
-  <div class="card-control text-xs-center"><i class="fa fa-plus-circle fa-5x"></i></div>
-  <div class="card-content">
-    <form (ngSubmit)="onSubmit()" #cardForm="ngForm">
-      <div class="form-group row">
-        <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
-          Name is required
+<a class="btn btn-primary" href="#create-card">Add card</a>
+
+<div id="create-card" class="overlay">
+  <a class="cancel" href="#"></a>
+  <div class="popup card">
+    <div class="card-top">
+      <h4 class="card-title">Create new card</h4>
+      <a class="close" href="#"><i class="fa fa-times"></i></a>
+    </div>
+    <div class="card-block">
+      <form (ngSubmit)="cardSubmit(cardForm)" #cardForm="ngForm" novalidate>
+        <div class="form-group" [ngClass]="{ 'has-danger': !name.valid && !name.pristine }">
+          <label for="name" class="form-control-label">Name</label>
+          <input type="text" class="form-control" id="name" placeholder="Name" required [(ngModel)]="model.name" name ="name" #name="ngModel" >
+          <!-- <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
+            Name is required
+          </div> -->
         </div>
-        <label for="name" class="col-sm-2 form-control-label">Name</label>
-        <div class="col-sm-10">
-          <input type="text" class="form-control" id="name" placeholder="Name" required
-          [(ngModel)]="model.name" name ="name" #name="ngModel" >
+        <div class="form-group">
+          <label for="desc" class="form-control-label">Description</label>
+          <input type="text" class="form-control" id="desc" placeholder="Description" [(ngModel)]="model.desc" name ="desc" #desc="ngModel" >
+          <!-- <div [hidden]="url.valid || url.pristine" class="alert alert-danger">
+            Name is required
+          </div> -->
         </div>
-      </div>
-      <div class="form-group row">
-        <div [hidden]="url.valid || url.pristine" class="alert alert-danger">
-          Address is required
+        <div class="form-group" [ngClass]="{ 'has-danger': !url.valid && !url.pristine }">
+          <label for="url" class="form-control-label">Address</label>
+          <input type="url" class="form-control" id="url" placeholder="Address" required [(ngModel)]="model.url" name ="url" #url="ngModel" >
+          <!-- <div [hidden]="url.valid || url.pristine" class="alert alert-danger">
+            Name is required
+          </div> -->
         </div>
-        <label for="inputPassword3" class="col-sm-2 form-control-label">Address</label>
-        <div class="col-sm-10">
-          <input type="url" class="form-control" id="url" placeholder="Address" required
-          [(ngModel)]="model.url" name="url" #url="ngModel">
-        </div>
-      </div>
-      <button class="btn btn-success-outline" type="submit">Add</button>
-    </form>
+        <button type="submit" class="btn btn-success-outline" [disabled]="!cardForm.form.valid" (click)="test()">Add</button>
+      </form>
+    </div>
   </div>
-<!--   <div class="card-block">
-    <h4 class="card-title">Add a new card</h4>
-  </div> -->
 </div>

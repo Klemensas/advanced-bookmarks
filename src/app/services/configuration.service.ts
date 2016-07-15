@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class ConfigurationService {
-    public config = {
-        fromServer: true
-    };
-  
+    private currentConfig = {};
+
+    public defaultConfig = { fromServer: true };
+    public config = new BehaviorSubject(<Object>this.defaultConfig);
+
     constructor() {
-        this.config = Object.assign(this.config, this.getConfiguration());
-        console.log('config gotten', this.config)
+        this.currentConfig = Object.assign({}, this.defaultConfig, this.getConfiguration());
+        this.config.next(this.currentConfig);
+        console.log('config gotten', this.currentConfig)
     }
 
     getConfiguration() {
@@ -16,9 +19,8 @@ export class ConfigurationService {
     }
 
     setConfiguration(data) {
-        // Override data with set data
-        this.config = Object.assign(this.config, data);
-        console.log('set config to', this.config);
-        localStorage.setItem('configuration', JSON.stringify(this.config));
+        this.currentConfig = Object.assign({}, this.defaultConfig, data);
+        localStorage.setItem('configuration', JSON.stringify(this.currentConfig));
+        this.config.next(this.currentConfig);
     }
 }

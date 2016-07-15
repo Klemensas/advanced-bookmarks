@@ -13,13 +13,14 @@ import { ConfigurationService, DataService } from './services/index';
 export class LinksAppComponent {
     public cards = [];
 
-    constructor(private configService: ConfigurationService, private dataService: DataService) {
-        console.log('hohoh');
-    }
+    constructor(private configService: ConfigurationService, private dataService: DataService) {}
 
     ngOnInit() {
         this.dataService.data.subscribe(
-            c => this.cards = c,
+            c => {
+              console.log('get cards', c)
+              this.cards = c
+            },
             error => console.error(error),
             () => console.error('UH OH, I SHOULD NEVER HAPPEN')
         );

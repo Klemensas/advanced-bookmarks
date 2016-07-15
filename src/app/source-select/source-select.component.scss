@@ -1,9 +1,17 @@
+$active: #d9534f;
+$inactive: #fff;
+
 .tgl-flip {
-    display: none;
+    -webkit-appearance: none;
     + .tgl-btn {
-        padding: 2px 30px;
+        padding: 2px 40px;
         transition: all .2s ease;
         perspective: 100px;
+        font-weight: 700;
+        color: $active;
+        text-transform: uppercase;
+        cursor: pointer;
+        opacity: 0.7;
         &:after, &:before {
             display: inline-block;
             transition: all .4s ease;
@@ -12,24 +20,28 @@
             position: absolute;
             line-height: 2em;
             font-weight: bold;
-            // color: #fff;
             position: absolute;
             top: 0;
             left: 0;
             backface-visibility: hidden;
             border-radius: 4px;
+            border: 1px solid $active;
         }
         &:after {
             content: attr(data-tg-on);
-            // background: #02C66F;
+            color: $inactive;
+            background-color: $active;
             transform: rotateX(-180deg);
         }
         &:before {
-            // background: #FF3A19;
             content: attr(data-tg-off);
+            background-color: $inactive;
         }
         &:active:before {
             transform: rotateX(-20deg);
+        }
+        &:hover, &:focus {
+            opacity: 1;
         }
     }
 
@@ -37,15 +49,12 @@
         &:before {
           transform: rotateX(180deg);
         }
-        
         &:after {
           transform: rotateX(0);
           left: 0;
-          // background: #7FC6A6;
         }
-        
         &:active:after {
           transform: rotateX(20deg);
-    }
+        }
     }
 }
