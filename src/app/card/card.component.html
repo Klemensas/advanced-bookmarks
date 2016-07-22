@@ -1,10 +1,15 @@
-<div class="card">
-  <div class="card-top">
-    <img class="card-img-top img-fluid" src="./placeholder.png" alt="Card image cap">
-  </div>
-  <div class="card-block">
-    <h4 class="card-title">{{item.name}}</h4>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    <div><pre class="pull-xs-left">{{item.url}}</pre><a href="{{item.url}}" class="btn btn-primary" >Go</a></div>
+<div class="card-group">
+  <div class="card" *ngFor="let card of group">
+    <div class="card-top">
+      <img class="card-img-top img-fluid" src="./placeholder.png" alt="Card image cap">
+    </div>
+    <div class="card-block">
+      <h4 class="card-title">{{card.name}}</h4>
+      <p [hidden]="!card.desc || !card.desc.length" class="card-text">{{card.desc}}</p>
+      <div>
+          <code class="pull-xs-left">{{card.url}}</code>
+          <a href="{{card.url}}" target="_blank" class="btn btn-primary btn-sm">Go</a>
+      </div>
+    </div>
   </div>
 </div>

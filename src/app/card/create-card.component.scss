@@ -25,6 +25,11 @@
     }
 }
 
+a.active .overlay:target {
+  visibility: visible;
+  opacity: 1;
+}
+
 .popup {
   margin: 10vh auto;
   padding: 20px;

@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   selector: 'card',
   templateUrl: 'card.component.html',
   styleUrls: ['card.component.css'],
-  inputs: ['item']
+  inputs: ['group']
 })
 export class CardComponent implements OnInit {
 

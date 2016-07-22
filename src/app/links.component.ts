@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavbarComponent } from './navbar/navbar.component';
-import { CardComponent, CreateCardComponent } from './card/index';
+import { CardComponent } from './card/index';
 import { ConfigurationService, DataService } from './services/index';
 
 @Component({
@@ -8,10 +8,11 @@ import { ConfigurationService, DataService } from './services/index';
   selector: 'app',
   templateUrl: 'links.component.html',
   styleUrls: ['links.component.css'],
-  directives: [NavbarComponent, CardComponent, CreateCardComponent]
+  directives: [NavbarComponent, CardComponent]
 })
 export class LinksAppComponent {
-    public cards = [];
+    public cards = {};
+    public cardGroups = [];
 
     constructor(private configService: ConfigurationService, private dataService: DataService) {}
 
@@ -20,6 +21,7 @@ export class LinksAppComponent {
             c => {
               console.log('get cards', c)
               this.cards = c
+              this.cardGroups = Object.keys(this.cards)
             },
             error => console.error(error),
             () => console.error('UH OH, I SHOULD NEVER HAPPEN')

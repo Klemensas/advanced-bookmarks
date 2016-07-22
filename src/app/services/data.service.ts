@@ -3,6 +3,9 @@ import { Injectable } from '@angular/core';
 import { ConfigurationService } from './index';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import 'rxjs/add/operator/toPromise';
+// import 'rxjs/add/operator/map';
+// import 'rxjs/add/operator/catch';
 import { Http/*, Response*/ } from '@angular/http';
 
 @Injectable()
@@ -39,21 +42,54 @@ export class DataService {
     }
 
     insertLocalData(data) {
-        const stored = JSON.parse(localStorage.getItem('storedData')) || [];
-        JSON.stringify(stored.push(data));
-        localStorage.setItem('storedData', JSON.stringify(stored));
-        // This should be handled by the component I guess?
-        this.data.next(stored);
+        return new Promise((resolve, reject) => {
+            const stored = JSON.parse(localStorage.getItem('storedData')) || [];
+            JSON.stringify(stored.push(data));
+            localStorage.setItem('storedData', JSON.stringify(stored));
+            // This should be handled by the component I guess?
+            this.data.next(stored);
+            resolve('ok');
+        });
     }
 
     loadServerData() {
         this.serverStream = new EventSource('http://192.168.111.200:3000/api/streamCards');
-        this.serverStream.addEventListener('message', (d) => {
+        this.serverStream.addEventListener('cards', (d) => {
             const data = JSON.parse(d.data);
             this.data.next(data);
        })
-        // this.http.get('http://192.168.111.200:3000/api/streamCards')
-        console.log('load server')
+        this.serverStream.addEventListener('card', (d) => {
+            const newCard = JSON.parse(d.data);
+            const group = Object.keys(newCard)[0];
+            const currentCards = this.data.getValue();
+            currentCards[group] = currentCards[group].concat(newCard[group]);
+            this.data.next(currentCards);
+       })
+    }
+
+    createCard(data) {
+        return this.fromServer ? this.postCard(data) : this.insertLocalData(data);
+    }
+
+    postCard(data) {
+        return this.http.post('http://192.168.111.200:3000/api/cards/add', data)
+            .toPromise()
+            .then(this.extractData)
+            .catch(this.handleError)
+    }
+
+    private extractData(res) {
+      let body = res.text();
+      return body.data || { };
+    }
+
+    private handleError (error: any) {
+      // In a real world app, we might use a remote logging infrastructure
+      // We'd also dig deeper into the error to get a better message
+      let errMsg = (error.message) ? error.message :
+        error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+      console.error(errMsg); // log to console instead
+      return Observable.throw(errMsg);
     }
 
 }

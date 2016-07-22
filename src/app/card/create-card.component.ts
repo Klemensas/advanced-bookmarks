@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
+import { DataService } from '../services/index';
+
 
 @Component({
   moduleId: module.id,
@@ -10,22 +12,41 @@ export class CreateCardComponent implements OnInit {
   model = {
       name: '',
       description: '',
-      url: ''
+      url: '',
+      tag: ''
+  };
+  keep = false;
+  active = true; // used for custom reset, until implemented
+
+  toggler; // In hindsight - I shouldn't have used css modal if I wanted to use js on it, oh well...
+  close;
+
+  constructor(private ds: DataService, private elementRef: ElementRef) {
   }
-  constructor() { console.log('constr call')}
 
   ngOnInit() {
+    // This hurts my face
+    this.toggler = this.elementRef.nativeElement.firstElementChild;
+    this.close = this.elementRef.nativeElement.querySelector('.close');
 
-    console.log('ho?')
+    if (window.location.hash === '#create-card') {
+      this.toggler.click();
+    }
   }
 
-  cardSubmit(ev) {
-      console.log(ev.path);
-      return 'wtf';
-  }
 
-  test() {
-    console.log('i run test')
+  cardSubmit(cardForm) {
+    if (cardForm.valid) {
+      this.active = false;
+      this.ds.createCard(cardForm.value)
+        .then(data => {
+          Object.keys(this.model).forEach(c => this.model[c] = '');
+          setTimeout(() => this.active = true, 0);
+        })
+        if (!this.keep) {
+          this.close.click();
+        }
+    }
   }
 
 }
