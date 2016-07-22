@@ -6,14 +6,22 @@ import { Component, OnInit } from '@angular/core';
   selector: 'card',
   templateUrl: 'card.component.html',
   styleUrls: ['card.component.css'],
-  inputs: ['group']
+  inputs: ['group', 'groupName']
 })
 export class CardComponent implements OnInit {
-
-  constructor() {
+    groupName
+  constructor(/*group: groupName*/) {
+      // console.log(this.group)
   }
 
   ngOnInit() {
+  }
+
+  cardScreen(card) {
+      if (card.screen) {
+          return `//localhost:3000/static/${this.groupName}/${card.name}.png`;
+      }
+      return './placeholder.png'
   }
 
 }

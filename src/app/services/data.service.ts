@@ -60,9 +60,18 @@ export class DataService {
        })
         this.serverStream.addEventListener('card', (d) => {
             const newCard = JSON.parse(d.data);
-            const group = Object.keys(newCard)[0];
+            const cardGroup = Object.keys(newCard)[0];
             const currentCards = this.data.getValue();
-            currentCards[group] = currentCards[group].concat(newCard[group]);
+            const targetGroup = currentCards[cardGroup] || [];
+            currentCards[cardGroup] = targetGroup.concat(newCard[cardGroup]);
+            this.data.next(currentCards);
+       })
+        this.serverStream.addEventListener('screenshot', (d) => {
+            const newScreen = JSON.parse(d.data);
+            const group = Object.keys(newScreen)[0];
+            const currentCards = this.data.getValue();
+            const target = currentCards[group].find(c => c.id === newScreen[group].id);
+            target.screen = true;
             this.data.next(currentCards);
        })
     }

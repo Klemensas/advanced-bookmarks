@@ -1,7 +1,7 @@
 <div class="card-group">
   <div class="card" *ngFor="let card of group">
     <div class="card-top">
-      <img class="card-img-top img-fluid" src="./placeholder.png" alt="Card image cap">
+      <img class="card-img-top img-fluid" [src]="cardScreen(card)" alt="Card image cap">
     </div>
     <div class="card-block">
       <h4 class="card-title">{{card.name}}</h4>

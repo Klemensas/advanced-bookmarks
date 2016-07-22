@@ -1,0 +1,45 @@
+.card-group {
+    position: relative;
+    .card {
+        flex: 1 0 100%;
+        position: absolute;
+        transform-origin: 50% -50%;
+        backface-visibility: hidden;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transition: 0.2s;
+        border: 1px solid red;
+        // TODO: sass loop here
+        &:first-child {
+            position: relative;
+            transform: scale(1);
+            z-index: 10;
+        }
+        &:nth-child(2) {
+            transform: scale(.95);
+            z-index: 9;
+        }
+        &:nth-child(3) {
+            transform: scale(.9);
+            z-index: 8;
+        }
+        &:nth-child(4) {
+            transform: scale(.85);
+            z-index: 7;
+        }
+        &:nth-child(5) {
+            transform: scale(.8);
+            z-index: 6;
+        }
+        &:nth-child(6) {
+            transform: scale(.75);
+            z-index: 5;
+        }
+        &:nth-child(7) {
+            transform: scale(.7);
+            z-index: 4;
+        }
+    }
+}
