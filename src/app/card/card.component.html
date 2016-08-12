@@ -1,15 +1,19 @@
 <div class="card-group">
   <div class="card" *ngFor="let card of group">
     <div class="card-top">
-      <img class="card-img-top img-fluid" [src]="cardScreen(card)" alt="Card image cap">
+      <img *ngIf="card.screenshot" class="card-img-top img-fluid" [src]="cardScreen(card)" alt="Card image capture">
+      <span *ngIf="!card.screenshot" class="waiting">
+        <i class="fa fa-cog fa-spin" aria-hidden="true"></i> Getting image...
+      </span>
     </div>
     <div class="card-block">
       <h4 class="card-title">{{card.name}}</h4>
       <p [hidden]="!card.desc || !card.desc.length" class="card-text">{{card.desc}}</p>
-      <div>
+      <div class="address-link">
           <code class="pull-xs-left">{{card.url}}</code>
-          <a href="{{card.url}}" target="_blank" class="btn btn-primary btn-sm">Go</a>
+          <a href="{{card.url}}" target="_blank" class="btn btn-info btn-sm">Go</a>
       </div>
     </div>
+    <button type="button" class="card-remove" (click)="removeCard(card)"><span><i class="fa fa-trash-o"></i> remove?</span></button>
   </div>
-</div>
+</div>  

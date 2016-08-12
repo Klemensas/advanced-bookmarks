@@ -37,11 +37,40 @@
             Name is required
           </div> -->
         </div>
+        <div class="form-group" *ngIf="usesServer">
+          <div class="form-control-label">Image</div>
+          <label class="custom-control custom-radio text-muted margin-left-1">
+            <input type="radio" class="custom-control-input" value="false" [(ngModel)]="advanced" [ngModelOptions]="{standalone: true}">
+            <span class="custom-control-indicator"></span>
+            <span class="custom-control-description">Basic</span>
+          </label>
+          <label class="custom-control custom-radio text-muted margin-left-1">
+            <input type="radio" class="custom-control-input" value="true" [(ngModel)]="advanced" [ngModelOptions]="{standalone: true}">
+            <span class="custom-control-indicator"></span>
+            <span class="custom-control-description">Advanced</span>
+          </label>
+
+          <div class="advanced-form" *ngIf="advanced==='true'">
+            <div class="form-group">
+              <label for="grab" class="form-control-label">Image grab address</label>
+              <input type="address" class="form-control" id="grab" placeholder="Image address" [(ngModel)]="model.image.grab" name="grab" #grab="ngModel" >
+            </div>
+            <div class="form-group">
+              <label for="wait" class="form-control-label">Grab wait</label>
+              <input type="number" class="form-control" id="wait" placeholder="5000" [(ngModel)]="model.image.wait" name="wait" #wait="ngModel" >
+            </div>
+          </div>
+        </div>
+        <div class="form-group" *ngIf="!usesServer" [ngClass]="{ 'has-danger': !image.valid && !image.pristine, 'has-success': image.valid }">
+          <label for="image" class="form-control-label">Image <small class="text-muted">- optional</small></label>
+          <input type="file" class="form-control" id="image" [(ngModel)]="model.image" name ="image" #image="ngModel" >
+        </div>
         <div>
-          <button type="submit" class="btn btn-success-outline" [disabled]="!cardForm.form.valid">Add</button>
-          <label class="c-input c-checkbox text-muted margin-left-1">
-            <input type="checkbox" [(ngModel)]="keep" [ngModelOptions]="{standalone: true}">
-            <span class="c-indicator"></span>Keep window open
+          <button type="submit" class="btn btn-outline-primary" [disabled]="!cardForm.form.valid">Add</button>
+          <label class="custom-control custom-checkbox text-muted margin-left-1">
+            <input class="custom-control-input" type="checkbox" [(ngModel)]="keep" [ngModelOptions]="{standalone: true}">
+            <span class="custom-control-indicator"></span>
+            <span class="custom-control-description">Keep window open</span>
           </label>
         </div>
       </form>

@@ -10,9 +10,9 @@ import { Http/*, Response*/ } from '@angular/http';
 
 @Injectable()
 export class DataService {
-    private fromServer: boolean;
     private serverStream: EventSource;
 
+    public fromServer: boolean;
     public data = new BehaviorSubject([]);
 
     constructor(private cs: ConfigurationService, private http: Http) {
@@ -36,15 +36,16 @@ export class DataService {
 
     loadLocalData() {
         console.log('load local')
-        const stored = JSON.parse(localStorage.getItem('storedData')) || [];
+        const stored = JSON.parse(localStorage.getItem('storedData')) || {};
         console.log(stored);
         this.data.next(stored);
     }
 
     insertLocalData(data) {
         return new Promise((resolve, reject) => {
-            const stored = JSON.parse(localStorage.getItem('storedData')) || [];
-            JSON.stringify(stored.push(data));
+            let stored = JSON.parse(localStorage.getItem('storedData')) || {};
+            stored = this.updateStored(stored, data);
+            // JSON.stringify(stored);
             localStorage.setItem('storedData', JSON.stringify(stored));
             // This should be handled by the component I guess?
             this.data.next(stored);
@@ -59,21 +60,24 @@ export class DataService {
             this.data.next(data);
        })
         this.serverStream.addEventListener('card', (d) => {
-            const newCard = JSON.parse(d.data);
-            const cardGroup = Object.keys(newCard)[0];
-            const currentCards = this.data.getValue();
-            const targetGroup = currentCards[cardGroup] || [];
-            currentCards[cardGroup] = targetGroup.concat(newCard[cardGroup]);
-            this.data.next(currentCards);
+            const data = JSON.parse(d.data);
+            const card = data.card;
+            const group = data.tag;
+            this.updateCard(card, group);
        })
-        this.serverStream.addEventListener('screenshot', (d) => {
-            const newScreen = JSON.parse(d.data);
-            const group = Object.keys(newScreen)[0];
-            const currentCards = this.data.getValue();
-            const target = currentCards[group].find(c => c.id === newScreen[group].id);
-            target.screen = true;
-            this.data.next(currentCards);
-       })
+    }
+
+    updateCard(card, group) {
+        const currentCards = this.data.getValue();
+        const targetGroup = currentCards[group] || [];
+        const index = targetGroup.findIndex(i => i.id === card.id);
+        if (index !== -1) {
+            targetGroup[index] = card;
+        } else {
+            currentCards[group] = targetGroup.concat(card);
+        }
+        console.log(currentCards);
+        this.data.next(currentCards);
     }
 
     createCard(data) {
@@ -85,6 +89,17 @@ export class DataService {
             .toPromise()
             .then(this.extractData)
             .catch(this.handleError)
+    }
+
+    private updateStored(stored, data) {
+        const tag = data.tag;
+        delete data.tag;
+        console.log(stored, tag, data)
+        if (!stored[tag]) {
+            stored[tag] = [];
+        }
+        stored[tag].push(data);
+        return stored;
     }
 
     private extractData(res) {

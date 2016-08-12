@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 // import { ConfigurationService } from '../services/configuration.service';
+import globals = require('../globals');
 
 @Component({
   moduleId: module.id,
@@ -18,10 +19,17 @@ export class CardComponent implements OnInit {
   }
 
   cardScreen(card) {
-      if (card.screen) {
-          return `//localhost:3000/static/${this.groupName}/${card.name}.png`;
-      }
-      return './placeholder.png'
+    // TODO: handle noscreenshot scenario
+    if (card.screenshot) {
+      return globals.backend + card.screenshot;
+    } else {
+      return;
+    }
+  }
+
+  removeCard(card) {
+    // TODO: actually remove
+    console.log('goodbye', card)
   }
 
 }

@@ -1,3 +1,5 @@
+// TODO: This must become an angular modal component initialized again on every call, it's this or listening for server/local change
+// Angular2 has no one-time binding, regarding: image grab url inheritance from address
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { DataService } from '../services/index';
 
@@ -11,17 +13,22 @@ import { DataService } from '../services/index';
 export class CreateCardComponent implements OnInit {
   model = {
       name: '',
-      description: '',
+      desc: '',
       url: '',
-      tag: ''
+      tag: '',
+      image: {}
   };
+  modelInit = Object.assign({}, this.model);
+  advanced = 'false';
   keep = false;
+  usesServer = false;
   active = true; // used for custom reset, until implemented
 
   toggler; // In hindsight - I shouldn't have used css modal if I wanted to use js on it, oh well...
   close;
 
   constructor(private ds: DataService, private elementRef: ElementRef) {
+    this.usesServer = ds.fromServer;
   }
 
   ngOnInit() {
@@ -37,10 +44,11 @@ export class CreateCardComponent implements OnInit {
 
   cardSubmit(cardForm) {
     if (cardForm.valid) {
+      console.log(cardForm, Object.assign({}, this.model));
       this.active = false;
-      this.ds.createCard(cardForm.value)
+      this.ds.createCard(this.model)
         .then(data => {
-          Object.keys(this.model).forEach(c => this.model[c] = '');
+          this.model = this.modelInit;
           setTimeout(() => this.active = true, 0);
         })
         if (!this.keep) {
