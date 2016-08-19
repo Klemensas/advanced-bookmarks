@@ -26,3 +26,5 @@ testem.log
 
 #System Files
 .DS_Store
+
+/server/public

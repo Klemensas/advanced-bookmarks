@@ -1,5 +1,5 @@
 <div class="card-group">
-  <div class="card" *ngFor="let card of group">
+  <div [tabindex]="-1+!i" (focusin)="focus(groupName)" (focusout)="loseFocus(groupName)" class="card" *ngFor="let card of group; let i = index">
     <div class="card-top">
       <img *ngIf="card.screenshot" class="card-img-top img-fluid" [src]="cardScreen(card)" alt="Card image capture">
       <span *ngIf="!card.screenshot" class="waiting">
@@ -14,6 +14,13 @@
           <a href="{{card.url}}" target="_blank" class="btn btn-info btn-sm">Go</a>
       </div>
     </div>
-    <button type="button" class="card-remove" (click)="removeCard(card)"><span><i class="fa fa-trash-o"></i> remove?</span></button>
+    <div class="remove-block" [ngClass]="{ active: card.remove }" >
+      <button type="button" class="card-remove toggle" (click)="card.remove = !card.remove"><span>remove</span><i class="fa fa-trash-o"></i></button>
+      <button type="button" class="card-remove confirm" (click)="removeCard(card)"><span>really?</span><i class="fa fa-check"></i></button>
+    </div>
   </div>
-</div>  
+  <div *ngIf="group.length > 1" class="navigation">
+    <a class="nav prev" (click)="navigate('prev')"><i class="fa fa-angle-left"></i><span>prev</span></a>
+    <a class="nav next" (click)="navigate('next')"><span>next</span><i class="fa fa-angle-right"></i></a>
+  </div>
+</div>

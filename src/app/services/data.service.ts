@@ -6,8 +6,8 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/toPromise';
 // import 'rxjs/add/operator/map';
 // import 'rxjs/add/operator/catch';
+import { backend } from '../globals';
 import { Http/*, Response*/ } from '@angular/http';
-
 @Injectable()
 export class DataService {
     private serverStream: EventSource;
@@ -54,7 +54,7 @@ export class DataService {
     }
 
     loadServerData() {
-        this.serverStream = new EventSource('http://192.168.111.200:3000/api/streamCards');
+       this.serverStream = new EventSource(`${backend}api/streamCards`);
         this.serverStream.addEventListener('cards', (d) => {
             const data = JSON.parse(d.data);
             this.data.next(data);
@@ -63,18 +63,26 @@ export class DataService {
             const data = JSON.parse(d.data);
             const card = data.card;
             const group = data.tag;
-            this.updateCard(card, group);
+            const event = data.event;
+            this.updateCard(card, group, event);
        })
     }
 
-    updateCard(card, group) {
+    updateCard(card, group, event) {
         const currentCards = this.data.getValue();
         const targetGroup = currentCards[group] || [];
         const index = targetGroup.findIndex(i => i.id === card.id);
-        if (index !== -1) {
-            targetGroup[index] = card;
+        if (event === 'remove') {
+            currentCards[group].splice(index, 1);
+            if (!currentCards[group].length) {
+                delete currentCards[group];
+            }
         } else {
-            currentCards[group] = targetGroup.concat(card);
+            if (index !== -1) {
+                targetGroup[index] = card;
+            } else {
+                currentCards[group] = targetGroup.concat(card);
+            }
         }
         console.log(currentCards);
         this.data.next(currentCards);
@@ -85,9 +93,17 @@ export class DataService {
     }
 
     postCard(data) {
-        return this.http.post('http://192.168.111.200:3000/api/cards/add', data)
+        return this.http.post(`${backend}api/cards/add`, data)
             .toPromise()
             .then(this.extractData)
+            .catch(this.handleError)
+    }
+
+    removeCard(card, group) {
+        return this.http.delete(`${backend}api/cards/${group}/${card.id}`)
+            .toPromise()
+            .then(this.extractData)
+            .then(d => console.log('del done', d))
             .catch(this.handleError)
     }
 
