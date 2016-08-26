@@ -34,6 +34,7 @@
     "nightmare": "^2.5.3",
     "node-uuid": "^1.4.7",
     "reflect-metadata": "0.1.3",
+    "rimraf": "^2.5.4",
     "rxjs": "5.0.0-beta.6",
     "systemjs": "0.19.26",
     "webshot": "^0.18.0",

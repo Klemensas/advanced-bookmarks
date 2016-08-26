@@ -8,12 +8,15 @@ const cors = require('cors');
 const mkdirp = require('mkdirp');
 const uuid = require('node-uuid');
 const morgan = require('morgan')
+const rimraf = require('rimraf')
 const nightmare = require('nightmare')({
   show: false,
   width: 480,
   height: 270,
   useContentSize: true
 });
+
+const public = '/public/';
 
 const db = low(__dirname + '/database.json', { storage: fileAsync });
 
@@ -27,7 +30,7 @@ app.use(morgan('tiny'));
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.text());
-app.use('/static', express.static(__dirname + '/public'));
+app.use('/static', express.static(__dirname + public));
 
 const listeners = [];
 
@@ -58,7 +61,7 @@ app.post('/api/cards/add', (req, res) => {
   sendEvent({ card, tag, event: 'add' }, 'card');
 
   screenService(data, tag, () => {
-    const card = groups[tag].find({ id: data.id}).assign({ screenshot: `static/${tag}/${data.name}-${data.id}.png` }).value();
+    const card = groups[tag].find({ id: data.id}).assign({ screenshot: `static/${tag}/${data.id}.png` }).value();
     console.log('i don did da request', card);
     sendEvent({ card, tag, event: 'update' }, 'card')
   });
@@ -70,12 +73,14 @@ app.delete('/api/cards/:tag/:card', (req, res) => {
   const tag = req.params['tag'];
   const card = req.params['card'];
   groups[tag].remove({ id: card }).value();
-  let group = groups[tag].value();
-  // TODO: add image deletion
-  if (!group.length) {
-    cardsDB.unset(tag).value();
-  }
   sendEvent({ card, tag, event: 'remove' }, 'card');
+  let group = groups[tag].value();
+  if (!group.length) {
+    rimraf(__dirname + public + tag, {}, (e) => { console.log('rimraf stuff', e )});
+    cardsDB.unset(tag).value();
+  } else {
+    rimraf(__dirname + public + tag + `/${card}.png`, {}, (e) => { console.log('rimmraf file', e)});
+  }
   return res.status(200).end();
 })
 
@@ -94,7 +99,7 @@ function sendEvent(dat, event) {
 }
 
 const screenService = (function() {
-  const store = __dirname + '/public/';
+  const store = __dirname + public;
   let busy = false;
   let queue = [];
 
@@ -129,7 +134,7 @@ const screenService = (function() {
         .goto(target)
         .viewport(width, height)
         .wait(time)
-        .screenshot(`${store}${item.tag}/${item.card.name}-${item.card.id}.png`)
+        .screenshot(`${store}${item.tag}/${item.card.id}.png`)
         .then(process)
         .then(item.cb)
         .catch(error => console.log('Totally unexpected error, server is dead now', error))
