@@ -71,17 +71,19 @@ export class DataService {
     updateCard(card, group, event) {
         const currentCards = this.data.getValue();
         const targetGroup = currentCards[group] || [];
-        const index = targetGroup.findIndex(i => i.id === card.id);
         if (event === 'remove') {
-            currentCards[group].splice(index, 1);
-            if (!currentCards[group].length) {
+            const index = targetGroup.findIndex(i => i.id === card);
+            targetGroup.splice(index, 1);
+            if (!targetGroup.length) {
                 delete currentCards[group];
             }
         } else {
+            const index = targetGroup.findIndex(i => i.id === card.id);
             if (index !== -1) {
                 targetGroup[index] = card;
             } else {
-                currentCards[group] = targetGroup.concat(card);
+                targetGroup.unshift(card);
+                currentCards[group] = targetGroup;
             }
         }
         console.log(currentCards);
@@ -114,7 +116,7 @@ export class DataService {
         if (!stored[tag]) {
             stored[tag] = [];
         }
-        stored[tag].push(data);
+        stored[tag].unshift(data);
         return stored;
     }
 
