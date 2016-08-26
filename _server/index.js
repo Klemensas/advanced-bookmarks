@@ -1,4 +1,10 @@
 /* eslint-env es6, node */
+
+/*TODO: 
+handle rimraf - async can get stuck
+handle nightmare - on error will stop working, needs restarting?
+*/
+
 const express = require('express');
 const sse = require('express-server-sent-events');
 const low = require('lowdb');
@@ -76,10 +82,10 @@ app.delete('/api/cards/:tag/:card', (req, res) => {
   sendEvent({ card, tag, event: 'remove' }, 'card');
   let group = groups[tag].value();
   if (!group.length) {
-    rimraf(__dirname + public + tag, {}, (e) => { console.log('rimraf stuff', e )});
+    rimraf(__dirname + public + tag, {}, (e) => { console.log('HANDLE ME - rimraf folder delete', e )});
     cardsDB.unset(tag).value();
   } else {
-    rimraf(__dirname + public + tag + `/${card}.png`, {}, (e) => { console.log('rimmraf file', e)});
+    rimraf(__dirname + public + tag + `/${card}.png`, {}, (e) => { console.log('HANDLE ME - rimmraf file delete', e)});
   }
   return res.status(200).end();
 })
@@ -120,7 +126,7 @@ const screenService = (function() {
   }
   function takeScreen(item) {
     let time = 5000;
-    let target = item.card.url;
+    let target = item.card.address[0].url;
     let width = 480;
     let height = 270;
     if (item.card.image) {
