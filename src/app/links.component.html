@@ -1,9 +1,11 @@
-<div class="container-fluid" id="wrapper">
+<div id="wrapper">
   <navbar class="clearfix"></navbar>
   
-  <div class="row">
-    <div class="col-lg-3 col-md-4 col-sm-6" *ngFor="let item of cardGroups">
-        <card [group]="cards[item]" [groupName]="item"></card>
-    </div>
+  <div class="container-fluid card-container">
+      <div class="row">
+        <div class="col-lg-3 col-md-4 col-sm-6" *ngFor="let item of cardGroups">
+            <card [group]="cards[item]" [groupName]="item"></card>
+        </div>
+      </div>
   </div>
 </div>

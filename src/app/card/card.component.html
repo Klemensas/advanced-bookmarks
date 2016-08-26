@@ -11,11 +11,11 @@
       <p [hidden]="!card.desc || !card.desc.length" class="card-text">{{card.desc}}</p>
       <div class="address-link">
           <code class="pull-xs-left">{{card.url}}</code>
-          <a href="{{card.url}}" target="_blank" class="btn btn-info btn-sm">Go</a>
+          <a [tabindex]="-1+!i" href="{{card.url}}" target="_blank" class="btn btn-info btn-sm">Go</a>
       </div>
     </div>
     <div class="remove-block" [ngClass]="{ active: card.remove }" >
-      <button type="button" class="card-remove toggle" (click)="card.remove = !card.remove"><span>remove</span><i class="fa fa-trash-o"></i></button>
+      <button [tabindex]="-1+!i" type="button" class="card-remove toggle" (click)="card.remove = !card.remove"><span>remove</span><i class="fa fa-trash-o"></i></button>
       <button type="button" class="card-remove confirm" (click)="removeCard(card)"><span>really?</span><i class="fa fa-check"></i></button>
     </div>
   </div>
