@@ -15,8 +15,9 @@
         border-radius: 4px;
         box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.125);
         .address-container {
-            max-height: 600px;
+            max-height: 170px;
             overflow: auto;
+            padding: 0 4px;
             .address-block {
                 margin: 4px 0;
                 code {

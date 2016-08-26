@@ -60,6 +60,10 @@ export class CreateCardComponent implements OnInit {
     });
   }
 
+  removeAddress(index) {
+    this.model.address.splice(index, 1);
+  }
+
   cardSubmit(cardForm) {
     if (cardForm.valid) {
       this.active = false;
