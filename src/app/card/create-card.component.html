@@ -11,21 +11,31 @@
       <form *ngIf="active" (ngSubmit)="cardSubmit(cardForm)" #cardForm="ngForm" novalidate>
         <div class="form-group" [ngClass]="{ 'has-danger': !name.valid && !name.pristine, 'has-success': name.valid }">
           <label for="name" class="form-control-label">Name</label>
-          <input type="text" class="form-control" id="name" placeholder="Name" required [(ngModel)]="model.name" name ="name" #name="ngModel">
+          <input type="text" class="form-control" id="name" placeholder="Name" required [(ngModel)]="model.name" name="name" #name="ngModel">
         </div>
+
         <div class="form-group" [ngClass]="{ 'has-success': desc.valid && !desc.pristine }">
           <label for="desc" class="form-control-label">Description <small class="text-muted">- optional</small></label>
-          <input type="text" class="form-control" id="desc" placeholder="Description" [(ngModel)]="model.desc" name ="desc" #desc="ngModel">
+          <input type="text" class="form-control" id="desc" placeholder="Description" [(ngModel)]="model.desc" name="desc" #desc="ngModel">
         </div>
-        <div class="form-group" [ngClass]="{ 'has-danger': !url.valid && !url.pristine, 'has-success': url.valid }">
-          <label for="url" class="form-control-label">Address</label>
-          <input type="url" class="form-control" id="url" placeholder="Address" required [(ngModel)]="model.url" name ="url" #url="ngModel">
-          <button disabled type="button" class="btn btn-info btn-block margin-top-1"><i class="fa fa-plus"></i> Additional address</button>
+
+        <div class="row" *ngFor="let adr of model.address; let i = index">
+          <div class="form-group col-lg-6" [ngClass]="{ 'has-danger': !url.valid && !url.pristine, 'has-success': url.valid }">
+            <label htmlFor="url-{{i}}" class="form-control-label">Address</label>
+            <input type="url" class="form-control" id="url-{{i}}" placeholder="Address" required name="url-{{i}}" pattern="^https?:\/\/(www.)?[^\/$\s].+" required [(ngModel)]="model.address[i].url" #url="ngModel">
+          </div>
+          <div class="form-group col-lg-6" [ngClass]="{ 'has-success': comment.valid && !comment.pristine }">
+            <label htmlFor="comment-{{i}}" class="form-control-label">Address comment <small class="text-muted">- optional</small></label>
+            <input type="text" class="form-control" id="comment-{{i}}" placeholder="Address Comment" [(ngModel)]="model.address[i].comment" name="comment-{{i}}" #comment="ngModel">
+          </div>
         </div>
+        <button type="button" class="btn btn-info btn-block margin-top-1" (click)="addAddress(model)"><i class="fa fa-plus"></i> Additional address</button>
+
         <div class="form-group" [ngClass]="{ 'has-danger': !tag.valid && !tag.pristine, 'has-success': tag.valid }">
           <label for="tag" class="form-control-label">Tag</label>
-          <input type="tag" class="form-control" id="tag" placeholder="Tag" required [(ngModel)]="model.tag" name ="tag" #tag="ngModel">
+          <input type="tag" class="form-control" id="tag" placeholder="Tag" required [(ngModel)]="model.tag" name="tag" #tag="ngModel">
         </div>
+
         <div class="form-group" *ngIf="usesServer">
           <div class="form-control-label">Image</div>
           <label class="custom-control custom-radio text-muted margin-left-1">
@@ -33,6 +43,7 @@
             <span class="custom-control-indicator"></span>
             <span class="custom-control-description">Basic</span>
           </label>
+
           <label class="custom-control custom-radio text-muted margin-left-1">
             <input type="radio" class="custom-control-input" value="true" [(ngModel)]="advanced" [ngModelOptions]="{standalone: true}">
             <span class="custom-control-indicator"></span>
@@ -42,12 +53,14 @@
           <div class="advanced-form" *ngIf="advanced==='true'">
             <div class="form-group">
               <label for="grab" class="form-control-label">Image grab address</label>
-              <input type="address" class="form-control" id="grab" placeholder="Image address" [(ngModel)]="model.image.grab" name="grab" #grab="ngModel">
+              <input type="url" class="form-control" id="grab" placeholder="Image address" [(ngModel)]="model.image.grab" name="grab" pattern="^https?:\/\/(www.)?[^\/$\s].+" #grab="ngModel">
             </div>
+
             <div class="form-group">
               <label for="wait" class="form-control-label">Grab wait</label>
               <input type="number" class="form-control" id="wait" placeholder="5000" [(ngModel)]="model.image.wait" name="wait" #wait="ngModel">
             </div>
+
             <div class="form-group">
               <div class="form-text">Image size</div>
               <div class="row">
@@ -63,10 +76,12 @@
             </div>
           </div>
         </div>
+
         <div class="form-group" *ngIf="!usesServer" [ngClass]="{ 'has-danger': !image.valid && !image.pristine, 'has-success': image.valid }">
           <label for="image" class="form-control-label">Image <small class="text-muted">- optional</small></label>
-          <input type="file" class="form-control" id="image" [(ngModel)]="model.image" name ="image" #image="ngModel">
+          <input type="file" class="form-control" id="image" [(ngModel)]="model.image" name="image" #image="ngModel">
         </div>
+
         <div>
           <button type="submit" class="btn btn-outline-primary" [disabled]="!cardForm.form.valid">Add</button>
           <label class="custom-control custom-checkbox text-muted margin-left-1">

@@ -14,7 +14,11 @@ export class CreateCardComponent implements OnInit {
   model = {
       name: '',
       desc: '',
-      url: '',
+      address: [{
+        url: '',
+        comment: ''
+      }],
+      urlComment: '',
       tag: '',
       image: {}
   };
@@ -23,6 +27,14 @@ export class CreateCardComponent implements OnInit {
   keep = false;
   usesServer = false;
   active = true; // used for custom reset, until implemented
+
+  /*TODO: follow https://github.com/angular/angular/issues/7393
+  validation is done by custom validators or by regex patterns.
+  I don't want to build my own custom validator for this one case.
+  Currently the below pattern is added directly to the template
+  because it doesn't allow to bind an expression correctly. 
+  */
+  urlPattern = /^https?:\/\/(www.)?[^\/$\s].+/;
 
   toggler; // In hindsight - I shouldn't have used css modal if I wanted to use js on it, oh well...
   close;
@@ -41,10 +53,15 @@ export class CreateCardComponent implements OnInit {
     }
   }
 
+  addAddress(model) {
+    model.address.push({
+      url: '',
+      comment: ''
+    });
+  }
 
   cardSubmit(cardForm) {
     if (cardForm.valid) {
-      console.log(cardForm, Object.assign({}, this.model));
       this.active = false;
       this.ds.createCard(this.model)
         .then(data => {
