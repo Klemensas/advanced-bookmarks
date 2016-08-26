@@ -56,7 +56,7 @@ app.post('/api/cards/add', (req, res) => {
   }
 
   data.id = uuid.v1()
-  const card = groups[tag].push(data).last().value();
+  const card = groups[tag].unshift(data).first().value();
 
   sendEvent({ card, tag, event: 'add' }, 'card');
 
