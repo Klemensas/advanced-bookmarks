@@ -27,4 +27,7 @@ testem.log
 #System Files
 .DS_Store
 
-/server/public
+
+!_server/
+/_server/database.json
+/_server/public
