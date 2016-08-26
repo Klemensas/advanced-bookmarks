@@ -14,22 +14,27 @@
         padding-bottom: 20px;
         border-radius: 4px;
         box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.125);
-        .address-link {
-            code {
-                font-size: 0.8rem;
-                width: 85%;
-                overflow-x: auto;
-                padding: .4rem;
-                white-space: nowrap;
-                border-top-right-radius: 0;
-                border-bottom-right-radius: 0;
-            }
-            .btn {
-                width: 15%;
-                padding: .4rem;
-                border: 0;
-                border-top-left-radius: 0;
-                border-bottom-left-radius: 0;
+        .address-container {
+            max-height: 600px;
+            overflow: auto;
+            .address-block {
+                margin: 4px 0;
+                code {
+                    font-size: 0.8rem;
+                    width: 85%;
+                    overflow-x: auto;
+                    padding: .4rem;
+                    white-space: nowrap;
+                    border-top-right-radius: 0;
+                    border-bottom-right-radius: 0;
+                }
+                .btn {
+                    width: 15%;
+                    padding: .4rem;
+                    border: 0;
+                    border-top-left-radius: 0;
+                    border-bottom-left-radius: 0;
+                }
             }
         }
 
