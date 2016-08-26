@@ -3,8 +3,17 @@
     <div class="card-top">
       <img *ngIf="card.screenshot" class="card-img-top img-fluid" [src]="cardScreen(card)" alt="Card image capture">
       <span *ngIf="!card.screenshot" class="waiting">
-        <i class="fa fa-cog fa-spin" aria-hidden="true"></i> Getting image...
+        <div *ngIf="card.screenshot === null">
+          <i class="fa fa-times" aria-hidden="true"></i> Can't get image
+        </div>
+        <div *ngIf="card.screenshot !== null">
+          <i class="fa fa-cog fa-spin" aria-hidden="true"></i> Getting image...
+        </div>
       </span>
+    </div>
+    <div *ngIf="i === 0 && group.length > 1" class="navigation">
+      <a class="nav prev" (click)="navigate('prev')"><i class="fa fa-angle-left"></i><span>prev</span></a>
+      <a class="nav next" (click)="navigate('next')"><span>next</span><i class="fa fa-angle-right"></i></a>
     </div>
     <div class="card-block">
       <h4 class="card-title">{{card.name}}</h4>
@@ -16,15 +25,10 @@
           <a [tabindex]="-1+!i" href="{{adr.url}}" target="_blank" class="btn btn-info btn-sm">Go</a>
         </div>
       </div>
-      <!-- </div> -->
     </div>
     <div class="remove-block" [ngClass]="{ active: card.remove }" >
       <button [tabindex]="-1+!i" type="button" class="card-remove toggle" (click)="card.remove = !card.remove"><span>remove</span><i class="fa fa-trash-o"></i></button>
       <button type="button" class="card-remove confirm" (click)="removeCard(card)"><span>really?</span><i class="fa fa-check"></i></button>
     </div>
-  </div>
-  <div *ngIf="group.length > 1" class="navigation">
-    <a class="nav prev" (click)="navigate('prev')"><i class="fa fa-angle-left"></i><span>prev</span></a>
-    <a class="nav next" (click)="navigate('next')"><span>next</span><i class="fa fa-angle-right"></i></a>
   </div>
 </div>

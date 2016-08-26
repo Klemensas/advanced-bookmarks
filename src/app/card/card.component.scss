@@ -15,7 +15,7 @@
         border-radius: 4px;
         box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.125);
         .address-container {
-            max-height: 170px;
+            max-height: 190px;
             overflow: auto;
             padding: 0 4px;
             .address-block {
@@ -44,7 +44,7 @@
         }
         @for $i from 1 through 5 {
             &:nth-child(#{$i}) {
-                transform: scale(1 - 0.05 * ($i - 1));
+                transform: scale(1 - 0.025 * ($i - 1));
                 z-index: 11 - $i;
             }
         }
@@ -105,42 +105,37 @@
                 }
             }
         }
-    }
-    .navigation {
-        position: absolute;
-        width: 100%;
-        z-index: 11;
-        top: 50%;
-        .nav {
-            background: red;
-            position: absolute;
-            display: flex;
-            line-height: 1rem;
-            margin-top: -0.5rem;
-            align-items: center;
-            cursor: pointer;
-            font-size: 0.75rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            opacity: 0.8;
-            text-shadow: none;
-            transition: 0.2s;
-            padding: 0 4px;
-            span {
+        .navigation {
+            width: 100%;
+            z-index: 11;
+            .nav {
+                background: black;
+                color: white;
+                position: absolute;
+                display: flex;
+                line-height: 1.2rem;
+                align-items: center;
+                cursor: pointer;
+                font-size: 0.75rem;
+                font-weight: 500;
+                text-transform: uppercase;
+                opacity: 0.8;
+                text-shadow: none;
+                transition: 0.2s;
                 padding: 0 4px;
-            }
-            .fa {
-                font-size: 1.25rem;
-            }
-            &.prev {
-                left: 0;
-            }
-            &.next {
-                right: 0;
-            }
-            &:focus, &:hover {
-                opacity: 1;
-                text-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
+                span {
+                    padding: 0 4px;
+                }
+                &.prev {
+                    left: 0;
+                }
+                &.next {
+                    right: 0;
+                }
+                &:focus, &:hover {
+                    opacity: 1;
+                    text-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
+                }
             }
         }
     }

@@ -54,7 +54,7 @@ export class CreateCardComponent implements OnInit {
   }
 
   addAddress(model) {
-    model.address.push({
+    this.model.address.push({
       url: '',
       comment: ''
     });
@@ -69,7 +69,7 @@ export class CreateCardComponent implements OnInit {
       this.active = false;
       this.ds.createCard(this.model)
         .then(data => {
-          this.model = this.modelInit;
+          this.model = Object.assign({}, this.modelInit);
           setTimeout(() => this.active = true, 0);
         })
         if (!this.keep) {

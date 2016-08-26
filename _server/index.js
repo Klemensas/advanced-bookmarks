@@ -66,9 +66,12 @@ app.post('/api/cards/add', (req, res) => {
 
   sendEvent({ card, tag, event: 'add' }, 'card');
 
-  screenService(data, tag, () => {
-    const card = groups[tag].find({ id: data.id}).assign({ screenshot: `static/${tag}/${data.id}.png` }).value();
-    console.log('i don did da request', card);
+  screenService(data, tag, (fail) => {
+    let screenshot = `static/${tag}/${data.id}.png`;
+    if (fail) {
+      screenshot = null;
+    }
+    const card = groups[tag].find({ id: data.id}).assign({ screenshot }).value();
     sendEvent({ card, tag, event: 'update' }, 'card')
   });
 
@@ -143,7 +146,11 @@ const screenService = (function() {
         .screenshot(`${store}${item.tag}/${item.card.id}.png`)
         .then(process)
         .then(item.cb)
-        .catch(error => console.log('Totally unexpected error, server is dead now', error))
+        .catch(error => {
+          console.log('Totally unexpected error, server is dead now', error)
+          item.cb(true);
+          process();
+        })
     });
   }
 
